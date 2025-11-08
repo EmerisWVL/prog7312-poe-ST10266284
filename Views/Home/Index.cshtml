@@ -1,4 +1,4 @@
-﻿@* Main menu page *@
+﻿@* Main menu page - UPDATED WITH ENABLED SERVICE REQUEST STATUS *@
 @{
     ViewData["Title"] = "Municipal Services App";
 }
@@ -12,18 +12,57 @@
     <div class="row mt-4">
         <div class="col-md-4 mb-3">
             <a href="@Url.Action("ReportIssue", "Home")" class="btn btn-primary btn-lg btn-block btn-animated">
-                Report Issues
+                <i class="fas fa-flag"></i> Report Issues
             </a>
+            <p class="text-muted mt-2">Submit service requests and report community issues</p>
         </div>
         <div class="col-md-4 mb-3">
-            <a href="@Url.Action("LocalEvents", "Home")" class="btn btn-primary btn-lg btn-block btn-animated">
-                Local Events and Announcements
+            <a href="@Url.Action("LocalEvents", "Home")" class="btn btn-success btn-lg btn-block btn-animated">
+                <i class="fas fa-calendar"></i> Local Events
             </a>
+            <p class="text-muted mt-2">Discover upcoming events and announcements</p>
         </div>
         <div class="col-md-4 mb-3">
-            <button class="btn btn-secondary btn-lg btn-block" disabled>
-                Service Request Status
-            </button>
+            <a href="@Url.Action("ServiceRequestStatus", "Home")" class="btn btn-info btn-lg btn-block btn-animated">
+                <i class="fas fa-tasks"></i> Service Request Status
+            </a>
+            <p class="text-muted mt-2">Track your submitted requests and their progress</p>
+        </div>
+    </div>
+
+    <!-- Quick Stats Section -->
+    <div class="row mt-5">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <h3 class="card-title">@ViewBag.TotalReports</h3>
+                    <p class="card-text">Total Reports</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-warning">
+                <div class="card-body">
+                    <h3 class="card-title">@ViewBag.PendingReports</h3>
+                    <p class="card-text">Pending</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-info">
+                <div class="card-body">
+                    <h3 class="card-title">@ViewBag.InProgressReports</h3>
+                    <p class="card-text">In Progress</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <h3 class="card-title">@ViewBag.ResolvedReports</h3>
+                    <p class="card-text">Resolved</p>
+                </div>
+            </div>
         </div>
     </div>
 </div>

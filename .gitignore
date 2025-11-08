@@ -18,7 +18,7 @@ obj/
 *.sln
 *.suo
 
-# User-uploaded files (optional, remove this line if you want to commit sample uploads for testing)
+# User-uploaded files 
 wwwroot/uploads/*
 
 # Other common ignores

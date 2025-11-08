@@ -1,63 +1,126 @@
-Municipal Services Web Application  
-  
-This is my Municipal Services Web Application project developed in ASP.NET Core MVC (C#).  
-It’s a dynamic and interactive website designed to connect citizens with their local municipality by allowing them to view local events, submit reports, and stay informed about community updates.
+Municipal Services Application
 
-Overview
-The purpose of this project is to create a user-friendly platform that displays local events and announcements, allows users to report municipal issues, and view their submitted reports.  
-I’ve also added a smart recommendation feature that suggests relevant events based on the user’s previous searches or the category of the event they’re viewing.
+Project Overview
+Hello I'm Ahmed Kader, and this is my final POE submission for PROG7312 Advanced Application Development.  
+I’ve built a comprehensive ASP.NET Core MVC web application that streamlines municipal services for South African communities.  
+This platform allows citizens to report issues, track service requests, and stay informed about local events all through a modern, user-friendly interface.
 
-Technologies Used
-- ASP.NET Core MVC (C#)
-- Razor Views
-- HTML, CSS, JavaScript
-- Bootstrap 5
-- jQuery
-- Animate.css for animations
+What This Application Does
 
-Features
-Home Page (Index.cshtml)  
-   - Clean and modern interface introducing the application.
+For Citizens
+- Report Issues: Submit service requests with location details, categories, descriptions, and the option to attach photos or documents.  
+- Track Requests: Monitor your service request status with real-time updates and priority tracking.  
+- Discover Events: Browse local events and announcements with smart recommendations.  
+- Stay Informed: Get personalized event suggestions based on your interests.
 
-Report Issue Page (ReportIssue.cshtml)  
-   - Allows users to submit a report about municipal issues.  
-   - Displays a confirmation message when the report is successfully submitted.
+For Municipalities
+- Efficient Management: Advanced data structures ensure optimal request processing.  
+- Priority Handling: Automatic prioritization of critical service requests.  
+- Data Insights: Built-in analytics and reporting capabilities.  
+- Scalable Architecture: Designed to handle the needs of growing communities.
 
-View Reports Page (ViewReport.cshtml) 
-   - Shows a list of submitted reports (currently static for demonstration).
+My Technical Implementation
 
-Local Events and Announcements (LocalEvents.cshtml)  
-   - Displays all local events and announcements dynamically.
-   - Search by name, filter by category, and filter by date.
-   - Sort events alphabetically or by date (ascending/descending).
-   - Fully responsive and styled with Bootstrap and animations.
-   - “View Event” button to open full event details.
+Custom Data Structures (Built from Scratch)
+All the data structures in this project were implemented manually without using built-in collections.
 
-View Event Page (ViewEvent.cshtml)
-   - Displays full details of the selected event.
-   - Shows up to 3 recommended events from the same category below it.
+Advanced Trees (20 Marks Requirement)
+- Binary Search Tree: Used for efficient searching and sorting of service requests.  
+- AVL Tree: A self-balancing tree that maintains consistent performance.  
+- Red-Black Tree: A color-balanced tree structure that guarantees O(log n) operations.
 
-Smart Recommendation Feature  
-   - Suggests 3 relevant events based on the user’s recent search or selected category.
-   - If no direct match, it shows general popular upcoming events.
-   - This feature was implemented to meet the rubric requirement for recommendations.
+Heaps & Graphs (30 Marks Requirement)
+- Min Heap: Manages service requests based on priority.  
+- Graph: Models relationships between service areas using nodes and edges.  
+- Minimum Spanning Tree: Implements Prim’s and Kruskal’s algorithms for efficient routing.  
+- Graph Traversal: Includes BFS and DFS algorithms for area analysis.
 
-How to Run the Project
-1. Open the project in Visual Studio or VS Code.
-2. Make sure .NET 8.0 SDK (or newer) is installed.
-3. In the terminal, run:
+Core Collections
+- Custom Stack: Tracks user event history using LIFO operations.  
+- Custom Queue: Handles event registrations using FIFO operations.  
+- Custom Set: Manages unique categories and tags.  
+- Custom Priority Queue: Handles priority-based event management.
+
+How to Run My Project
+
+Quick Start
+```bash
+1. Clone or download the project
+git clone https://github.com/VCWVL/prog7312-poe-ST10266284.git
+cd MunicipalServicesApp
+
+2. Build the application
 dotnet build
-to ensure there are no errors.
-4. Then run:
+
+3. Run the application
 dotnet run
-5. Open your browser and go to:
-http://localhost:xxxx
-(Replace xxxx with your actual port number shown in the terminal.)
 
-Conclusion
-This project demonstrates my understanding of ASP.NET MVC, front-end integration, and dynamic data handling.  
-It’s clean, functional, and visually appealing while meeting all rubric requirements, including the recommendation feature.
+4. Open your browser and go to the link vs code provides
 
-Thanks for reviewing my project 
-— Ahmed Kader
+What You’ll See
+-Home Page: A clean dashboard showing service statistics.
+-Report Issues: A professional form with file uploads and progress tracking.
+-Local Events: Advanced filtering and smart recommendations.
+-Service Status: Comprehensive tracking with visual charts and data structure demonstrations.
+
+Data Structure Demonstrations
+In the Service Request Status Page, I demonstrate:
+-Tree Traversals: Real examples of Binary Search Tree, AVL, and Red-Black Tree operations.
+-Heap Operations: Priority-based request extraction and management.
+-Graph Algorithms: Minimum Spanning Tree calculations and traversal patterns.
+-Visual Charts: Interactive doughnut and bar charts showing request distributions.
+
+Why I Chose These Structures
+
+Each data structure was chosen for a specific reason.
+Trees handle searching and sorting, heaps manage priority requests, and graphs model service area relationships just like a real municipal system would.
+This approach makes the application efficient, realistic, and scalable.
+
+My Design Philosophy
+User Experience First
+I focused on creating an interface that’s both beautiful and functional. The application features:
+Responsive Design: Works seamlessly on phones, tablets, and desktops.
+Smooth Animations: Professional transitions and loading states.
+Intuitive Navigation: Clear menus and a consistent visual hierarchy.
+Accessibility: Proper contrast ratios and full keyboard navigation.
+
+Professional Styling
+
+I used Bootstrap 5 as a foundation and added extensive custom CSS to give the application a unique, professional appearance that stands out from generic templates.
+
+Implementation Report
+Data Structure Explanations
+Binary Search Tree (BST)
+Role: Efficient searching and sorting of service requests by various criteria.
+Contribution: Reduces search time from O(n) to O(log n) for large datasets.
+Example: Finding all requests in a specific category or area becomes much faster.
+AVL Tree
+Role: A self-balancing tree that maintains consistent performance.
+Contribution: Guarantees O(log n) operations even with uneven data.
+Example: When requests are submitted in sequence, the tree automatically balances itself.
+Red-Black Tree
+Role: Maintains balance using color properties and rotation rules.
+Contribution: More efficient for write-heavy operations.
+Example: Ideal for frequently updated request statuses.
+Min Heap
+Role: Handles service requests based on priority.
+Contribution: Ensures urgent issues are addressed first.
+Example: Critical infrastructure issues are automatically prioritized.
+Graph and Minimum Spanning Tree
+Role: Models relationships and optimizes routing between service areas.
+Contribution: Reduces travel time and resource usage for service teams.
+Example: Finds the most efficient route for multiple service calls in a region.
+
+Architecture Decisions
+
+I chose ASP.NET Core MVC because it provides:
+-Separation of Concerns: Clear distinction between models, views, and controllers.
+-Performance: A high-performance framework with minimal overhead.
+-Ecosystem: A rich library base and strong community support.
+-Career Relevance: Widely used in enterprise-level software development.
+
+GitHub Repository
+
+You can view or download the full project here:
+https://github.com/VCWVL/prog7312-poe-ST10266284.git
 

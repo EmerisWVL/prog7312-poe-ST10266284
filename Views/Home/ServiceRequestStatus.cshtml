@@ -1,0 +1,390 @@
+@model List<MunicipalServicesApp.Models.Report>
+@{
+    ViewData["Title"] = "Service Request Status";
+}
+
+<div class="container mt-5">
+    <h2 class="text-primary animate__animated animate__fadeIn">Service Request Status</h2>
+    <p class="text-muted mb-4">Track the progress of your submitted service requests</p>
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-info animate__animated animate__fadeIn">
+            <h4>No Service Requests Found</h4>
+            <p>You haven't submitted any service requests yet. <a href="@Url.Action("ReportIssue", "Home")"
+                    class="alert-link">Submit your first request</a> to get started.</p>
+        </div>
+    }
+    else
+    {
+        <!-- Status Filter -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="btn-group" role="group">
+                    <a href="@Url.Action("ServiceRequestStatus", new { status = "All" })"
+                        class="btn @(ViewBag.SelectedStatus == "All" ? "btn-primary" : "btn-outline-primary")">All</a>
+                    <a href="@Url.Action("ServiceRequestStatus", new { status = "Pending" })"
+                        class="btn @(ViewBag.SelectedStatus == "Pending" ? "btn-warning" : "btn-outline-warning")">Pending</a>
+                    <a href="@Url.Action("ServiceRequestStatus", new { status = "In Progress" })"
+                        class="btn @(ViewBag.SelectedStatus == "In Progress" ? "btn-info" : "btn-outline-info")">In
+                        Progress</a>
+                    <a href="@Url.Action("ServiceRequestStatus", new { status = "Resolved" })"
+                        class="btn @(ViewBag.SelectedStatus == "Resolved" ? "btn-success" : "btn-outline-success")">Resolved</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Service Requests Table -->
+        <div class="card shadow-sm animate__animated animate__fadeInUp mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Your Service Requests</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Location</th>
+                                <th>Category</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                                <th>Submitted</th>
+                                <th>Days Open</th>
+                                <th>Assigned To</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var report in Model)
+                            {
+                                string statusClass = report.Status switch
+                                {
+                                    "Pending" => "warning",
+                                    "In Progress" => "info",
+                                    "Resolved" => "success",
+                                    _ => "secondary"
+                                };
+
+                                string priorityClass = report.Priority switch
+                                {
+                                    1 => "secondary",
+                                    2 => "info",
+                                    3 => "warning",
+                                    4 => "danger",
+                                    _ => "secondary"
+                                };
+
+                                <tr class="animate__animated animate__fadeIn">
+                                    <td><strong>#@report.Id</strong></td>
+                                    <td>@report.Location</td>
+                                    <td>@report.Category</td>
+                                    <td>
+                                        <span class="badge bg-@priorityClass">
+                                            @switch (report.Priority)
+                                            {
+                                                case 1:
+                                                    <text>Low</text>
+                                                    break;
+                                                case 2:
+
+                                                    <text>Medium</text>
+                                                    break;
+                                                case 3:
+
+                                                    <text>High</text>
+                                                    break;
+                                                case 4:
+
+                                                    <text>Critical</text>
+                                                    break;
+                                            }
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-@statusClass">@report.Status</span>
+                                    </td>
+                                    <td>@report.SubmissionTimestamp.ToString("MMM dd, yyyy")</td>
+                                    <td>
+                                        <span class="badge @(report.DaysSinceSubmission > 7 ? "bg-danger" : "bg-secondary")">
+                                            @report.DaysSinceSubmission day(s)
+                                        </span>
+                                    </td>
+                                    <td>@report.AssignedTo</td>
+                                    <td>
+                                        <a href="@Url.Action("ViewReport", new { id = report.Id })"
+                                            class="btn btn-sm btn-outline-primary">View Details</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="row mt-4">
+            <div class="col-md-3">
+                <div class="card text-white bg-primary mb-3">
+                    <div class="card-body text-center">
+                        <h3 class="card-title">@ViewBag.TotalCount</h3>
+                        <p class="card-text">Total Requests</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-warning mb-3">
+                    <div class="card-body text-center">
+                        <h3 class="card-title">@ViewBag.PendingCount</h3>
+                        <p class="card-text">Pending</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-info mb-3">
+                    <div class="card-body text-center">
+                        <h3 class="card-title">@ViewBag.InProgressCount</h3>
+                        <p class="card-text">In Progress</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-success mb-3">
+                    <div class="card-body text-center">
+                        <h3 class="card-title">@ViewBag.ResolvedCount</h3>
+                        <p class="card-text">Resolved</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DATA VISUALIZATION SECTION -->
+        <div class="row mt-5">
+            <!-- Status Distribution Chart -->
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">Request Status Distribution</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container" style="height: 300px;">
+                            <canvas id="statusChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Priority Distribution Chart -->
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-warning text-white">
+                        <h5 class="mb-0">Request Priority Distribution</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container" style="height: 300px;">
+                            <canvas id="priorityChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advanced Data Structure Demonstrations -->
+        <div class="row mt-4">
+            <!-- Tree Structures -->
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">Tree Data Structures</h5>
+                    </div>
+                    <div class="card-body">
+                        <h6>Binary Search Tree (First 5 Reports):</h6>
+                        <ul class="list-group mb-3">
+                            @foreach (var report in ViewBag.BSTTraversal)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    #@report.Id - @report.Category
+                                    <span class="badge bg-primary rounded-pill">P:@report.Priority</span>
+                                </li>
+                            }
+                        </ul>
+
+                        <h6>AVL Tree (First 5 Reports):</h6>
+                        <ul class="list-group mb-3">
+                            @foreach (var report in ViewBag.AVLTraversal)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    #@report.Id - @report.Category
+                                    <span class="badge bg-info rounded-pill">P:@report.Priority</span>
+                                </li>
+                            }
+                        </ul>
+
+                        <div class="alert alert-info">
+                            <strong>AVL Tree Info:</strong> Height: @ViewBag.AVLHeight | Balanced: @ViewBag.AVLBalanced
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Heap & Graph Structures -->
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-danger text-white">
+                        <h5 class="mb-0">Heap & Graph Structures</h5>
+                    </div>
+                    <div class="card-body">
+                        <h6>Min Heap - Top Priority Reports:</h6>
+                        <ul class="list-group mb-3">
+                            @foreach (var report in ViewBag.TopPriorityReports)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    #@report.Id - @report.Category
+                                    <span class="badge bg-danger rounded-pill">P:@report.Priority</span>
+                                </li>
+                            }
+                        </ul>
+
+                        <h6>Graph Minimum Spanning Tree:</h6>
+                        <div class="alert alert-secondary">
+                            <strong>Prim's MST Weight:</strong> @ViewBag.PrimMSTWeight<br>
+                            <strong>Kruskal's MST Weight:</strong> @ViewBag.KruskalMSTWeight<br>
+                            <small class="text-muted">Represents optimal service area connectivity</small>
+                        </div>
+
+                        <h6>Graph Traversal:</h6>
+                        <div class="row">
+                            <div class="col-6">
+                                <strong>BFS:</strong>
+                                <span class="badge bg-primary">[@string.Join(", ", ViewBag.BFSTraversal)]</span>
+                            </div>
+                            <div class="col-6">
+                                <strong>DFS:</strong>
+                                <span class="badge bg-info">[@string.Join(", ", ViewBag.DFSTraversal)]</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Add hover effects to table rows
+            $('table tbody tr').hover(
+                function () {
+                    $(this).addClass('table-active');
+                },
+                function () {
+                    $(this).removeClass('table-active');
+                }
+            );
+
+            // Initialize Charts
+            initializeCharts();
+        });
+
+        function initializeCharts() {
+            // Status Distribution Chart
+            const statusCtx = document.getElementById('statusChart').getContext('2d');
+            const statusChart = new Chart(statusCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Pending', 'In Progress', 'Resolved'],
+                    datasets: [{
+                        data: [@ViewBag.PendingCount, @ViewBag.InProgressCount, @ViewBag.ResolvedCount],
+                        backgroundColor: [
+                            '#ffc107', // Warning yellow
+                            '#17a2b8', // Info teal
+                            '#28a745'  // Success green
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Requests by Status',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Priority Distribution Chart
+            const priorityCtx = document.getElementById('priorityChart').getContext('2d');
+
+            // Calculate priority counts
+            const priorityCounts = [0, 0, 0, 0];
+                @foreach (var report in Model)
+                {
+                    @:priorityCounts[@report.Priority - 1]++;
+            }
+
+                const priorityChart = new Chart(priorityCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Low', 'Medium', 'High', 'Critical'],
+                    datasets: [{
+                        label: 'Number of Requests',
+                        data: priorityCounts,
+                        backgroundColor: [
+                            '#6c757d', // Secondary
+                            '#17a2b8', // Info
+                            '#ffc107', // Warning
+                            '#dc3545'  // Danger
+                        ],
+                        borderWidth: 1,
+                        borderColor: '#dee2e6'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'Requests by Priority Level',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+}
